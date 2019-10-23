@@ -134,10 +134,10 @@ def get_conditions(filters):
 
 	if not (filters.get("fromdate") and filters.get("todate")):
 		msgprint(_("Please select fromdate  and todate"), raise_exception=1)
-	date1 = datetime.datetime.strptime(filters.get("fromdate"), "%Y-%m-%d").strftime("%d-%m-%Y")
+	date1 = datetime.datetime.strptime(filters.get("fromdate"),"%Y-%m-%d").strftime("%d-%m-%Y")
 	date2 = datetime.datetime.strptime(filters.get("todate"), "%Y-%m-%d").strftime("%d-%m-%Y")
 
-	for i in range((date1 - date2).days + 1):
+	for i in  daterange(date1,date2):
          filters["total_days_in_month"].append(i.strftime("%d"))
 
 	conditions = " and attendance_date  >=  %(fromdate)s and attendance_date <= %(todate)s"
@@ -146,7 +146,10 @@ def get_conditions(filters):
 	if filters.get("employee"): conditions += " and employee = %(employee)s"
 
 	return conditions, filters
-
+def daterange(start_date, end_date):
+    for n in range(int ((end_date - start_date).days)):
+        yield start_date + timedelta(n)
+		
 def get_employee_details():
 	emp_map = frappe._dict()
 	for d in frappe.db.sql("""select name, employee_name, designation, department, branch, company,
