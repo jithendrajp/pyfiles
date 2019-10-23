@@ -17,6 +17,8 @@ def execute(filters=None):
 	conditions, filters = get_conditions(filters)
 	columns = get_columns(filters)
 	att_map = get_attendance_list(conditions, filters)
+	msgprint(_(att_map))
+
 	emp_map = get_employee_details()
 
 	holiday_list = [emp_map[d]["holiday_list"]
@@ -45,7 +47,7 @@ def execute(filters=None):
 
 		total_p = total_a = total_l = 0.0
 		for day in filters["total_days_in_month"]:
-			status = att_map.get(emp).get(day, "None")
+			status = att_map.get(emp).get(int(day), "None")
 			status_map = {"Present": "P", "Absent": "A", "Half Day": "HD",
 			    "On Leave": "L", "None": "", "Holiday": "<b>H</b>"}
 			if status == "None" and holiday_map:
@@ -125,8 +127,9 @@ def get_attendance_list(conditions, filters):
 	att_map = {}
 	for d in attendance_list:
 		att_map.setdefault(d.employee, frappe._dict()).setdefault(d.day_of_month, "")
-		att_map[d.employee][d.day_of_month] = d.status
 
+		att_map[d.employee][d.day_of_month] = d.status
+       
 	return att_map
 
 
@@ -146,7 +149,6 @@ def get_conditions(filters):
     # 	filters["total_days_in_month"].append(i.strftime("%d"))
 
 	conditions = " and attendance_date  >=  %(fromdate)s and attendance_date <= %(todate)s"
-	msgprint(_(filters["total_days_in_month"]))
 	if filters.get("company"): conditions += " and company = %(company)s"
 	if filters.get("employee"): conditions += " and employee = %(employee)s"
 
