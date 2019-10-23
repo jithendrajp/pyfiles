@@ -130,12 +130,16 @@ def get_attendance_list(conditions, filters):
 
 
 def get_conditions(filters):
-	if not (filters.get("FromDate") and filters.get("ToDate")):
-		msgprint(_("Please select FromDate and ToDate"), raise_exception=1)
 
-    for dt in daterange(date(filters.get("FromDate")),date(filters.get("ToDate"))):
-        filters["total_days_in_month"].append(dt.strftime("%d"))
-    conditions = " and attendance_date  >=  %(fromdate)s and attendance_date <= %(todate)s"
+	if not (filters.get("fromdate") and filters.get("todate")):
+		msgprint(_("Please select month and year"), raise_exception=1)
+
+
+	for i in range(filters.get("fromdate") - filters.get("todate").days + 1):
+         filters["total_days_in_month"].append(i.strftime("%d"))
+
+	conditions = " and attendance_date  >=  %(fromdate)s and attendance_date <= %(todate)s"
+
 	if filters.get("company"): conditions += " and company = %(company)s"
 	if filters.get("employee"): conditions += " and employee = %(employee)s"
 
