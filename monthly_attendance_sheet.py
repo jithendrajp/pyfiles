@@ -13,7 +13,7 @@ import datetime
 
 def execute(filters=None):
 	if not filters: filters = {}
-
+	filters["total_days_in_month"]= []
 	conditions, filters = get_conditions(filters)
 	columns = get_columns(filters)
 	att_map = get_attendance_list(conditions, filters)
@@ -136,10 +136,9 @@ def get_conditions(filters):
 		msgprint(_("Please select fromdate  and todate"), raise_exception=1)
 	date1 = datetime.datetime.strptime(filters.get("fromdate"),"%Y-%m-%d").date()
 	date2 = datetime.datetime.strptime(filters.get("todate"), "%Y-%m-%d").date()
-
- 	filters["total_days_in_month"]=[]
-	for i in  daterange(date1,date2):
-        filters["total_days_in_month"].append(i.strftime("%d"))
+	for i in daterange(date1,date2):
+		print(i.strftime("%d"))
+    	filters["total_days_in_month"].append(i.strftime("%d"))
 
 	conditions = " and attendance_date  >=  %(fromdate)s and attendance_date <= %(todate)s"
 
