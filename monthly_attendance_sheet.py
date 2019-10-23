@@ -125,9 +125,9 @@ def get_attendance_list(conditions, filters):
 
 	att_map = {}
 	for d in attendance_list:
-		att_map.setdefault(d.employee, frappe._dict()).setdefault(d.day_of_month, "")
+		att_map.setdefault(d.employee, frappe._dict()).setdefault(d.day_of_month.strftime("%Y-%m-%d"), "")
 
-		att_map[d.employee][d.day_of_month] = d.status
+		att_map[d.employee][d.day_of_month.strftime("%Y-%m-%d")] = d.status
        
 	return att_map
 
