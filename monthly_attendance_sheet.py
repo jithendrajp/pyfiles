@@ -17,7 +17,7 @@ def execute(filters=None):
 	conditions, filters = get_conditions(filters)
 	columns = get_columns(filters)
 	att_map = get_attendance_list(conditions, filters)
-	msgprint(att_map)
+	msgprint(str(att_map))
 
 	emp_map = get_employee_details()
 
