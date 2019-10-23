@@ -32,8 +32,8 @@ def execute(filters=None):
 	    """select name from `tabLeave Type`""", as_list=True)
 	leave_list = [d[0] for d in leave_types]
 	columns.extend(leave_list)
-	columns.extend([_("Total Late Entries") + ":Float:120",
-	               _("Total Early Exits") + ":Float:120"])
+	# columns.extend([_("Total Late Entries") + ":Float:120",
+	#                _("Total Early Exits") + ":Float:120"])
 
 	for emp in sorted(att_map):
 		emp_det = emp_map.get(emp)
@@ -50,7 +50,7 @@ def execute(filters=None):
 			    "On Leave": "L", "None": "", "Holiday": "<b>H</b>"}
 			if status == "None" and holiday_map:
 				emp_holiday_list = emp_det.holiday_list if emp_det.holiday_list else default_holiday_list
-				if emp_holiday_list in holiday_map and (int(day)+1) in holiday_map[emp_holiday_list]:
+				if emp_holiday_list in holiday_map and (int(day)) in holiday_map[emp_holiday_list]:
 					status = "Holiday"
 			row.append(status_map[status])
 
@@ -141,7 +141,7 @@ def get_conditions(filters):
     	filters["total_days_in_month"].append(i.strftime("%d"))
 
 	conditions = " and attendance_date  >=  %(fromdate)s and attendance_date <= %(todate)s"
-
+	msgprint(_(filters["total_days_in_month"]))
 	if filters.get("company"): conditions += " and company = %(company)s"
 	if filters.get("employee"): conditions += " and employee = %(employee)s"
 
