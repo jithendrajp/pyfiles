@@ -138,7 +138,7 @@ def get_conditions(filters):
 	date2 = datetime.datetime.strptime(filters.get("todate"), "%Y-%m-%d").date()
 	delta = date2 - date1
 	for i in range(delta.days + 1):
-		day = sdate + timedelta(days=i)
+		day = date1 + timedelta(days=i)
 		filters["total_days_in_month"].append(day.strftime("%d"))
 	
 	# for i in daterange(date1,date2):
