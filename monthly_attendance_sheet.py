@@ -25,7 +25,7 @@ def execute(filters=None):
 	    'Company',  filters.get("company"),  "default_holiday_list")
 	holiday_list.append(default_holiday_list)
 	holiday_list = list(set(holiday_list))
-	holiday_map = get_holiday(holiday_list, filters["month"])
+	holiday_map = get_holiday(holiday_list, filters["fromdate"],filters["todate"])
 
 	data = []
 	leave_types = frappe.db.sql(
@@ -136,9 +136,10 @@ def get_conditions(filters):
 		msgprint(_("Please select fromdate  and todate"), raise_exception=1)
 	date1 = datetime.datetime.strptime(filters.get("fromdate"),"%Y-%m-%d").date()
 	date2 = datetime.datetime.strptime(filters.get("todate"), "%Y-%m-%d").date()
+
  	filters["total_days_in_month"]=[]
 	for i in  daterange(date1,date2):
-         filters["total_days_in_month"].append(i.strftime("%d"))
+        filters["total_days_in_month"].append(i.strftime("%d"))
 
 	conditions = " and attendance_date  >=  %(fromdate)s and attendance_date <= %(todate)s"
 
@@ -158,12 +159,12 @@ def get_employee_details():
 
 	return emp_map
 
-def get_holiday(holiday_list, month):
+def get_holiday(holiday_list, fromdate,todate):
 	holiday_map = frappe._dict()
 	for d in holiday_list:
 		if d:
 			holiday_map.setdefault(d, frappe.db.sql_list('''select day(holiday_date) from `tabHoliday`
-				where parent=%s and month(holiday_date)=%s''', (d, month)))
+				where parent=%s and holiday_date>= %s and holiday_date <=  %s''', (d, fromdate,todate)))
 
 	return holiday_map
 
