@@ -112,7 +112,7 @@ def get_columns(filters):
 	]
 
 	for day in filters["total_days_in_month"]:
-		columns.append(cstr(day.strftime("%Y-%m-%d")) + "::20")
+		columns.append(cstr(day) + "::20")
 
 	columns += [_("Total Present") + ":Float:80", _("Total Leaves") +
 	              ":Float:80",  _("Total Absent") + ":Float:80"]
