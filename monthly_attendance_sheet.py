@@ -46,12 +46,12 @@ def execute(filters=None):
 
 		total_p = total_a = total_l = 0.0
 		for day in filters["total_days_in_month"]:
-			status = att_map.get(emp).get(day, "None")
+			status = att_map.get(emp).get(day.strftime("%Y-%m-%d"), "None")
 			status_map = {"Present": "P", "Absent": "A", "Half Day": "HD",
 			    "On Leave": "L", "None": "", "Holiday": "<b>H</b>"}
 			if status == "None" and holiday_map:
 				emp_holiday_list = emp_det.holiday_list if emp_det.holiday_list else default_holiday_list
-				if emp_holiday_list in holiday_map and (day) in holiday_map[emp_holiday_list]:
+				if emp_holiday_list in holiday_map and (day.strftime("%Y-%m-%d")) in holiday_map[emp_holiday_list]:
 					status = "Holiday"
 			row.append(status_map[status])
 
