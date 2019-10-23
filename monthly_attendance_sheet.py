@@ -136,7 +136,7 @@ def get_conditions(filters):
 		msgprint(_("Please select fromdate  and todate"), raise_exception=1)
 	date1 = datetime.datetime.strptime(filters.get("fromdate"),"%Y-%m-%d").date()
 	date2 = datetime.datetime.strptime(filters.get("todate"), "%Y-%m-%d").date()
-
+ 	filters["total_days_in_month"]=[]
 	for i in  daterange(date1,date2):
          filters["total_days_in_month"].append(i.strftime("%d"))
 
