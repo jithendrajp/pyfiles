@@ -76,9 +76,9 @@ def execute(filters=None):
 		leave_details = frappe.db.sql("""select leave_type, status, count(*) as count from `tabAttendance`\
 			where leave_type is not NULL %s group by leave_type, status""" % conditions, filters, as_dict=1)
 
-		time_default_counts = frappe.db.sql("""select (select count(*) from `tabAttendance` where \
-			late_entry = 1 %s) as late_entry_count, (select count(*) from tabAttendance where \
-			early_exit = 1 %s) as early_exit_count""" % (conditions, conditions), filters)
+		# time_default_counts = frappe.db.sql("""select (select count(*) from `tabAttendance` where \
+		# 	late_entry = 1 %s) as late_entry_count, (select count(*) from tabAttendance where \
+		# 	early_exit = 1 %s) as early_exit_count""" % (conditions, conditions), filters)
 
 		leaves = {}
 		for d in leave_details:
@@ -95,7 +95,7 @@ def execute(filters=None):
 			else:
 				row.append("0.0")
 
-		row.extend([time_default_counts[0][0], time_default_counts[0][1]])
+		# row.extend([time_default_counts[0][0], time_default_counts[0][1]])
 		data.append(row)
 	return columns, data
 
