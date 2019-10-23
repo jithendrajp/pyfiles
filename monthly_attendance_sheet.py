@@ -17,7 +17,7 @@ def execute(filters=None):
 	conditions, filters = get_conditions(filters)
 	columns = get_columns(filters)
 	att_map = get_attendance_list(conditions, filters)
-	#msgprint(_(att_map))
+	msgprint(att_map)
 
 	emp_map = get_employee_details()
 
@@ -34,8 +34,7 @@ def execute(filters=None):
 	    """select name from `tabLeave Type`""", as_list=True)
 	leave_list = [d[0] for d in leave_types]
 	columns.extend(leave_list)
-	# columns.extend([_("Total Late Entries") + ":Float:120",
-	#                _("Total Early Exits") + ":Float:120"])
+	
 
 	for emp in sorted(att_map):
 		emp_det = emp_map.get(emp)
