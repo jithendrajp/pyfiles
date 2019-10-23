@@ -50,7 +50,7 @@ def execute(filters=None):
 			    "On Leave": "L", "None": "", "Holiday": "<b>H</b>"}
 			if status == "None" and holiday_map:
 				emp_holiday_list = emp_det.holiday_list if emp_det.holiday_list else default_holiday_list
-				if emp_holiday_list in holiday_map and (int(day)) in holiday_map[emp_holiday_list]:
+				if emp_holiday_list in holiday_map and (int(day) + 1) in holiday_map[emp_holiday_list]:
 					status = "Holiday"
 			row.append(status_map[status])
 
@@ -136,9 +136,13 @@ def get_conditions(filters):
 		msgprint(_("Please select fromdate  and todate"), raise_exception=1)
 	date1 = datetime.datetime.strptime(filters.get("fromdate"),"%Y-%m-%d").date()
 	date2 = datetime.datetime.strptime(filters.get("todate"), "%Y-%m-%d").date()
-	for i in daterange(date1,date2):
-		print(i.strftime("%d"))
-    	filters["total_days_in_month"].append(i.strftime("%d"))
+	delta = timedelta(days=1)
+	while date1 <= date2:
+		filters["total_days_in_month"].append(date1.strftime("%d"))
+		date1 += delta
+	# for i in daterange(date1,date2):
+	# 	print(i.strftime("%d"))
+    # 	filters["total_days_in_month"].append(i.strftime("%d"))
 
 	conditions = " and attendance_date  >=  %(fromdate)s and attendance_date <= %(todate)s"
 	msgprint(_(filters["total_days_in_month"]))
