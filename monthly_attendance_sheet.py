@@ -28,6 +28,7 @@ def execute(filters=None):
 	holiday_list.append(default_holiday_list)
 	holiday_list = list(set(holiday_list))
 	holiday_map = get_holiday(holiday_list, filters["fromdate"],filters["todate"])
+	#msgprint(str(holiday_map))
 	data = []
 	leave_types = frappe.db.sql(
 	    """select name from `tabLeave Type`""", as_list=True)
@@ -76,7 +77,9 @@ def execute(filters=None):
 		leave_details = frappe.db.sql("""select leave_type, status, count(*) as count from `tabAttendance`\
 			where leave_type is not NULL %s group by leave_type, status""" % conditions, filters, as_dict=1)
 
-	
+		# time_default_counts = frappe.db.sql("""select (select count(*) from `tabAttendance` where \
+		# 	late_entry = 1 %s) as late_entry_count, (select count(*) from tabAttendance where \
+		# 	early_exit = 1 %s) as early_exit_count""" % (conditions, conditions), filters)
 
 		leaves = {}
 		for d in leave_details:
@@ -93,6 +96,7 @@ def execute(filters=None):
 			else:
 				row.append("0.0")
 
+		# row.extend([time_default_counts[0][0], time_default_counts[0][1]])
 		data.append(row)
 	return columns, data
 
@@ -139,12 +143,18 @@ def get_conditions(filters):
 		day = date1 + timedelta(days=i)
 		filters["total_days_in_month"].append(day.strftime("%Y-%m-%d"))
 	
+	# for i in daterange(date1,date2):
+	# 	print(i.strftime("%d"))
+    # 	filters["total_days_in_month"].append(i.strftime("%d"))
+
 	conditions = " and attendance_date  >=  %(fromdate)s and attendance_date <= %(todate)s"
 	if filters.get("company"): conditions += " and company = %(company)s"
 	if filters.get("employee"): conditions += " and employee = %(employee)s"
 
 	return conditions, filters
-
+# def daterange(start_date, end_date):
+#     for n in range(int ((end_date - start_date).days)):
+#         yield start_date + timedelta(n)
 
 def get_employee_details():
 	emp_map = frappe._dict()
