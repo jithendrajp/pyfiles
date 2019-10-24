@@ -152,9 +152,9 @@ def get_conditions(filters):
 	if filters.get("employee"): conditions += " and employee = %(employee)s"
 
 	return conditions, filters
-def daterange(start_date, end_date):
-    for n in range(int ((end_date - start_date).days)):
-        yield start_date + timedelta(n)
+# def daterange(start_date, end_date):
+#     for n in range(int ((end_date - start_date).days)):
+#         yield start_date + timedelta(n)
 
 def get_employee_details():
 	emp_map = frappe._dict()
@@ -168,7 +168,7 @@ def get_holiday(holiday_list, fromdate,todate):
 	holiday_map = frappe._dict()
 	for d in holiday_list:
 		if d:
-			holiday_map.setdefault(d, frappe.db.sql_list('''select  DATE(holiday_date) from `tabHoliday`
+			holiday_map.setdefault(d, frappe.db.sql_list('''select  STR_TO_DATE(holiday_date,"%Y-%m-%d") from `tabHoliday`
 				where parent=%s and holiday_date>= %s and holiday_date <=  %s''', (d, fromdate,todate)))
 
 	return holiday_map
