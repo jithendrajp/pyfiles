@@ -17,7 +17,7 @@ def execute(filters=None):
 	conditions, filters = get_conditions(filters)
 	columns = get_columns(filters)
 	att_map = get_attendance_list(conditions, filters)
-	msgprint(str(att_map))
+	
 
 	emp_map = get_employee_details()
 
@@ -28,7 +28,7 @@ def execute(filters=None):
 	holiday_list.append(default_holiday_list)
 	holiday_list = list(set(holiday_list))
 	holiday_map = get_holiday(holiday_list, filters["fromdate"],filters["todate"])
-
+	msgprint(str(holiday_map))
 	data = []
 	leave_types = frappe.db.sql(
 	    """select name from `tabLeave Type`""", as_list=True)
