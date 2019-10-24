@@ -168,7 +168,7 @@ def get_holiday(holiday_list, fromdate,todate):
 	holiday_map = frappe._dict()
 	for d in holiday_list:
 		if d:
-			holiday_map.setdefault(d, frappe.db.sql_list('''select  STR_TO_DATE(holiday_date, %s) from `tabHoliday`
+			holiday_map.setdefault(d, frappe.db.sql_list('''select  DATE_FORMAT(holiday_date, %s) from `tabHoliday`
 				where parent=%s and holiday_date>= %s and holiday_date <=  %s''', ("%Y-%m-%d",d, fromdate,todate)))
 
 	return holiday_map
